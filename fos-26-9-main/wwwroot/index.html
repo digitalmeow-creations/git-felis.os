@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FelisOS</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/css/variables.css">
+    <link rel="stylesheet" href="/css/core.css">
+    <link rel="stylesheet" href="/css/shelf.css">
+</head>
+<body>
+    <!-- Main Desktop Workspace -->
+    <main id="desktop-workspace"></main>
+
+    <!-- OS UI Components -->
+    <div id="cabinet" class="hidden"></div>
+    <div id="device-dock" class="hidden"></div>
+    <nav id="shelf"></nav>
+
+    <!-- Core OS Scripts -->
+    <script src="/js/kernel.js"></script>
+    <script src="/js/vfs.js"></script>
+    <script src="/js/window-manager.js"></script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('FelisOS Kernel (Service Worker) registered.', reg))
+                    .catch(err => console.error('Kernel panic: Service Worker failed.', err));
+            });
+        }
+    </script>
+</body>
+</html>

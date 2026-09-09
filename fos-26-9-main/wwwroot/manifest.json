@@ -1,0 +1,37 @@
+/*
+ *   FILE: "manifest.json" 
+ *   AUTHOR: $Creator.0\tg <tgreen.dev@outlook.com>   
+ * 
+ *   ---( ^.^ )---
+ *   
+ *   SUMMARY:
+ *   This is a JSON file that contains metadata about a web application. It is used to provide information
+ *   about the app, such as its name, icons, start URL, display mode, and other properties.
+ *    
+ *   This file is essential for Progressive Web Apps (PWAs) as it allows users to install the app on their devices 
+ *   and provides a native-like experience.
+ *
+ */
+
+{
+    "name": "FelisOS 26.9.9 (.digitalmeow)",
+    "short_name": "fos-26-9-root",
+    "description": "Full-featured, open-source, and user-friendly in-browser OS and desktop environment for all devices.",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#4A3B56",
+    "icons": [
+        {
+            "src": "/assets/ui/icons/icon-192x192.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml"
+        },
+        {
+            "src": "/assets/ui/icons/icon-512x512.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml"
+        }
+    ]
+}
+
+/* -- END OF FILE ( ^.- ) -- */

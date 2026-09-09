@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>fos_26_9_main</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;prettier/prettier;</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;prettier/prettier;</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="C:\Users\usr-t\OneDrive\Documents\Creation\FelisOS\fos-idea\SourcesCode\kernel.js.txt" Link="kernel.js.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\apps\kit-n-command\" />
+    <Folder Include="wwwroot\apps\storage-explorer\" />
+    <Folder Include="wwwroot\apps\scribe-plus\" />
+    <Folder Include="wwwroot\apps\scribe\" />
+    <Folder Include="wwwroot\assets\ui\icons\md3\" />
+  </ItemGroup>
+
+</Project>
