@@ -1,7 +1,9 @@
 # FelisOS
 <hr/>
 &emsp;&emsp;<sup>++ The following sections are only intended to populate README.md while active development is underway. This document will be kept in a future commit.</sup><br/>
+
 ## Artboards
+
 A look at the native look and feel, future apps and overall conceptualization of FelisOS as I build the user interface and OS shell in active development.<br/>
 <table>
   <tr><td><img width="1606" height="910" alt="image" src="https://github.com/digitalmeow-creator0/git-felis.os/blob/master/artboard3.png"><br/>
