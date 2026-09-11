@@ -1,0 +1,92 @@
+/* Reusable FelisOS controls and states. Keep components composable with app markup. */
+.fos-button,
+.fos-input,
+.fos-select {
+    min-height: 40px;
+    border: 1px solid var(--fos-color-border);
+    border-radius: var(--fos-radius-sm);
+    background: var(--fos-color-surface-raised);
+    color: var(--fos-color-ink);
+}
+
+.fos-button {
+    padding: 0 var(--fos-space-4);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.fos-button:hover,
+.fos-button:focus-visible,
+.fos-button[data-active="true"] {
+    border-color: var(--fos-color-border-strong);
+    background: var(--fos-color-surface-hover);
+}
+
+.fos-button--primary {
+    border-color: transparent;
+    background: var(--fos-color-accent);
+    color: #170d2b;
+}
+
+.fos-button--primary:hover,
+.fos-button--primary:focus-visible {
+    background: var(--fos-color-accent-strong);
+}
+
+.fos-input,
+.fos-select {
+    width: 100%;
+    padding: 0 var(--fos-space-3);
+}
+
+.fos-input:focus,
+.fos-select:focus {
+    border-color: var(--fos-color-focus);
+    outline: 3px solid rgba(213, 199, 255, 0.24);
+}
+
+.fos-card {
+    border: 1px solid var(--fos-color-border);
+    border-radius: var(--fos-radius-md);
+    background: var(--fos-color-surface);
+    box-shadow: var(--fos-shadow-sm);
+}
+
+.fos-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fos-space-2);
+    color: var(--fos-color-ink-muted);
+    font-size: var(--fos-text-sm);
+}
+
+.fos-status::before {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    content: "";
+}
+
+.fos-status--online {
+    color: var(--fos-color-success);
+}
+
+.fos-status--offline {
+    color: var(--fos-color-danger);
+}
+
+:where(button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 3px solid rgba(213, 199, 255, 0.7);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}

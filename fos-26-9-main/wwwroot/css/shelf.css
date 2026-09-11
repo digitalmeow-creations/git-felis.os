@@ -22,6 +22,7 @@
     border: 1px solid var(--color-border);
     border-radius: 8px;
     background: var(--color-surface-soft);
+    box-shadow: var(--fos-shadow-sm);
 }
 
 .shelf-btn {
@@ -40,8 +41,14 @@
 }
 
 .shelf-btn:hover,
-.shelf-task:hover {
+.shelf-task:hover,
+.shelf-task[data-active="true"],
+.shelf-widget:hover {
     background: var(--color-purple-700);
+}
+
+.shelf-task {
+    color: var(--color-ink-muted);
 }
 
 #shelf-tasks {
@@ -52,8 +59,17 @@
 }
 
 .shelf-task {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     padding: 0 12px;
     cursor: pointer;
+}
+
+.shelf-task img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
 }
 
 .shelf-widget {

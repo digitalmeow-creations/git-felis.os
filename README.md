@@ -37,3 +37,16 @@ A look at the native look and feel, future apps and overall conceptualization of
   </ul>
   </ul>
 </p>
+
+## UI system
+
+The FelisOS shell uses a small dependency-free design system in `fos-26-9-main/wwwroot/css`.
+`tokens.css` is the source of truth for color roles, spacing, typography, shape, and elevation.
+`components.css` contains reusable controls and states, while `core.css` and `shelf.css`
+compose those primitives into the desktop shell. SVGs exported from Lunacy live under
+`wwwroot/assets/ui` and are referenced by semantic app and system components.
+
+To preview the shell locally, open `fos-26-9-main/felis-os.csproj` in Visual Studio and run
+the `http` profile. For Apache NetBeans, open `fos-26-9-main/wwwroot` as a static web project,
+start its built-in web server, and open `index.html`. Both approaches serve the same
+dependency-free `wwwroot` files.
