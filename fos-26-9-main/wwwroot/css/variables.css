@@ -1,2 +1,15 @@
-﻿body {
+:root {
+    --color-ink: #f4efff;
+    --color-muted: #b8a9d1;
+    --color-purple-950: #160a2a;
+    --color-purple-900: #24103e;
+    --color-purple-700: #5b1e8e;
+    --color-blue-600: #2639c7;
+    --color-cyan-400: #6fd8ff;
+    --color-surface: rgba(18, 13, 28, 0.88);
+    --color-surface-soft: rgba(44, 25, 68, 0.86);
+    --color-border: rgba(255, 255, 255, 0.18);
+    --shadow-window: 0 20px 60px rgba(0, 0, 0, 0.45);
+    --font-ui: "Manrope", "Segoe UI", sans-serif;
+    --font-display: "Barlow", "Segoe UI", sans-serif;
 }
