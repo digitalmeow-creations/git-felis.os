@@ -32,6 +32,7 @@ body {
     color: var(--color-ink);
     background: var(--color-purple-950) url("../assets/ui/wallpapers/default-bg.svg") center / cover no-repeat fixed;
     font-family: var(--font-ui);
+    line-height: var(--fos-line-body);
 }
 
 button,
@@ -41,6 +42,11 @@ input {
 
 button {
     color: inherit;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
 }
 
 .hidden {
@@ -92,6 +98,10 @@ button {
     background: var(--color-surface);
     box-shadow: var(--shadow-window);
     backdrop-filter: blur(18px);
+}
+
+.panel[aria-hidden="true"] {
+    visibility: hidden;
 }
 
 #cabinet {
@@ -240,6 +250,19 @@ button {
     height: calc(100% - 38px);
     overflow: auto;
     padding: 16px;
+}
+
+.felis-window-content textarea {
+    width: 100%;
+    min-height: 220px;
+    padding: var(--fos-space-3);
+    border: 1px solid var(--fos-color-border);
+    border-radius: var(--fos-radius-sm);
+    background: rgba(10, 6, 18, 0.78);
+    color: var(--fos-color-ink);
+    font: inherit;
+    line-height: var(--fos-line-body);
+    resize: vertical;
 }
 
 @media (max-width: 600px) {

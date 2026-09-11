@@ -11,6 +11,8 @@ const CORE_ASSETS = [
     './',
     './index.html',
     './manifest.json',
+    './css/tokens.css',
+    './css/components.css',
     './css/variables.css',
     './css/core.css',
     './css/shelf.css',
