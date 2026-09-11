@@ -1,17 +1,20 @@
 # FelisOS
 <hr/>
-&emsp;&emsp;<sup>++ The following sections are only intended to populate README.md while active development is underway. This document will be kept in a future commit.</sup><br/>
+&emsp;&emsp;<sup> The following sections are only intended to populate README.md while active development is underway. This document and its committed changes will be kept in a future document and commit.</sup><br/>
 
 ## Artboards
 
 A look at the native look and feel, future apps and overall conceptualization of FelisOS as I build the user interface and OS shell in active development.<br/>
 <table>
-  <tr><td><img width="1606" height="910" alt="image" src="https://github.com/digitalmeow-creator0/git-felis.os/blob/master/artboard3.png"><br/>
+  <tr><td><br/>
+    <code>-- (!): [Placeholder] - <i>Lunacy artboard depicting a user's viewpoint of the Felis ecosystem.</i></code><br/>
   <samp>[Artboard3.png]<br/>
-    &emsp;&emsp; <sub>This artboard depicts a running instance of the <i>KneadyPages</i> web development environment, a sub-concept for the <i>KneadySuite</i> productivity suite. We see user is selecting a different browser for testing and debugging. Meanwhile, red formatting borders enclose text objects and a dialog box for customizing a selected checkbox component is open.</samp></sub><br/></td></tr>
-  <tr><td><img width="1606" height="910" alt="image" src="https://github.com/digitalmeow-creator0/git-felis.os/blob/master/artboard2.png"><br/>
+    &emsp;&emsp; <sub>A description of the image will go here.</samp></sub><br/>
+  </td></tr>
+  <tr><td><br/>
+     <code>-- (!): [Placeholder] - <i>Lunacy artboard depicting a user's viewpoint of the Felis ecosystem.</i></code><br/>
   <samp>[Artboard2.png]<br/>
-    &emsp;&emsp; <sub>This artboard depicts a concept of the desktop <i>Cabinet</i> component. We can see a <a href="http://www.google.com/">Google</a> search bar, a list with links to a <a href="http://www.mozilla.org">Mozilla Firefox</a> browser app and a <a href="http://office365.com">Microsoft Office365</a> possible PWA app. For now, these remains just concepts...</samp></sub><br/>
+    &emsp;&emsp; <sub>A description of the image will go here.</samp></sub><br/>
   </td></tr>
 </table>
 <br/><hr/>
