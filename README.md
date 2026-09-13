@@ -7,14 +7,14 @@
 A look at the native look and feel, future apps and overall conceptualization of FelisOS as I build the user interface and OS shell in active development.<br/>
 <table>
   <tr><td><br/>
-    <code>-- (!): [Placeholder] - <i>Lunacy artboard depicting a user's viewpoint of the Felis ecosystem.</i></code><br/>
-  <samp>[Artboard3.png]<br/>
-    &emsp;&emsp; <sub>A description of the image will go here.</samp></sub><br/>
+    <img src="https://github.com/digitalmeow-creations/git-felis.os/blob/master/GoalsMessageInTextEditor.png" alt="Success"><br/>
+  <samp>[GoalsMessageInTextEditor.png]<br/>
+    &emsp;&emsp; <sub>First successful debug launch in Visual Studio. We have a desktop, three open primitive CSS windows, and a message typed in the text editor app for the observer.</samp></sub><br/>
   </td></tr>
   <tr><td><br/>
-     <code>-- (!): [Placeholder] - <i>Lunacy artboard depicting a user's viewpoint of the Felis ecosystem.</i></code><br/>
-  <samp>[Artboard2.png]<br/>
-    &emsp;&emsp; <sub>A description of the image will go here.</samp></sub><br/>
+     <img src="https://github.com/digitalmeow-creations/git-felis.os/blob/master/VsDebugChrome-1.png" alt="Success"><br/>
+  <samp>[VsDebugChrome-1.png]<br/>
+    &emsp;&emsp; <sub>It's safe to say it won't remain this way, but I plan to document each step along the way and preserve its history. Cheers, friends...</samp></sub><br/>
   </td></tr>
 </table>
 <br/><hr/>
@@ -22,7 +22,9 @@ A look at the native look and feel, future apps and overall conceptualization of
 ## Software Used and Acknowledgements
 <p>I.) Software used: &emsp;<i>Software tools and environments used in the creation of FelisOS and its features, apps and components.</i>
 <ul id="tools-used">
-  <li><a href="https://icons8.com/lunacy-download">Lunacy 14.1 by <i>icons8</i></a>.<br/>
+  <li><a href="https://icons8.com/lunacy-download">Lunacy 14.1 <i>by icons8</i></a>.<br/>
+      <sup><samp> + Download link provided</samp></sup></li>
+  <li><a href="https://www.figma.com/community">Figma <i>by Google</i></a>.<br/>
       <sup><samp> + Download link provided</samp></sup></li>
   <li><a href="https://visualstudio.microsoft.com/insiders/">Microsoft VisualStudio 2026 Insiders</a><br/>
       <sup><samp> + Download link provided</samp></sup></li>
