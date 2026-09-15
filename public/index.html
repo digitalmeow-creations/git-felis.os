@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full select-none">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FelisOS Web Desktop & Design System Engine</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN for System Telemetry -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* 
+      Palette: Futuristic Graphite & Lavender (#121218, #1E1E28, #A374D5, #F4F4F8)
+      Architecture: Integrated Glassmorphic Web Desktop with Strict Layer Hierarchy, Drag Manager, and System Harness.
+    */
+
+    :root {
+      --fos-bg-graphite: #121218;
+      --fos-bg-panel-active: rgba(32, 32, 44, 0.88);
+      --fos-bg-panel-idle: rgba(22, 22, 30, 0.72);
+      --fos-accent-lavender: #A374D5;
+      --fos-accent-lavender-hover: #B88CEB;
+      --fos-accent-lavender-glow: rgba(163, 116, 213, 0.35);
+      --fos-accent-danger: #ED6A5E;
+      --fos-accent-warn: #F4BF4F;
+      --fos-accent-success: #61C554;
+      --fos-text-main: #F4F4F8;
+      --fos-text-muted: #8C8C9E;
+      --fos-border-active: rgba(163, 116, 213, 0.55);
+      --fos-border-idle: rgba(255, 255, 255, 0.08);
+      --fos-font-ui: 'Manrope', 'Inter', sans-serif;
+      --fos-font-mono: 'JetBrains Mono', monospace;
+      --fos-radius-win: 14px;
+      --fos-radius-ctrl: 8px;
+      --fos-blur-glass: blur(20px);
+      --fos-shadow-win: 0 16px 40px rgba(0, 0, 0, 0.5);
+      --fos-shadow-glow: 0 0 24px rgba(163, 116, 213, 0.28);
+      
+      /* FelisOS Desktop Theme Engine - Window Chrome Styling */
+      --chrome-control-exit-bg-default: transparent;
+      --chrome-control-exit-bg-hover: #e81123;
+      --chrome-control-exit-bg-active: #c40e1e;
+      --chrome-control-exit-icon-default: var(--fos-text-muted);
+      --chrome-control-exit-icon-hover: #ffffff;
+      
+      --chrome-control-expand-bg-default: transparent;
+      --chrome-control-expand-bg-hover: rgba(255,255,255,0.1);
+      --chrome-control-expand-bg-active: rgba(255,255,255,0.2);
+      
+      --chrome-control-hide-bg-default: transparent;
+      --chrome-control-hide-bg-hover: rgba(255,255,255,0.1);
+      --chrome-control-hide-bg-active: rgba(255,255,255,0.2);
+
+      --chrome-control-inactive-opacity: 0.4;
+    }
+
+    body {
+      background-color: var(--fos-bg-graphite);
+      font-family: var(--fos-font-ui);
+      color: var(--fos-text-main);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Desktop Background Themes */
+    .fos-wallpaper-default {
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(163, 116, 213, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 80% 80%, rgba(115, 80, 180, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(18, 18, 26, 0.95) 0%, #0d0d14 100%);
+    }
+
+    .fos-wallpaper-aurora {
+      background-image: 
+        radial-gradient(circle at 10% 90%, rgba(97, 197, 84, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(163, 116, 213, 0.22) 0%, transparent 50%),
+        linear-gradient(135deg, #0b0b12 0%, #161524 100%);
+    }
+
+    .fos-wallpaper-obsidian {
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.06) 0%, transparent 60%),
+        linear-gradient(180deg, #08080c 0%, #121219 100%);
+    }
+
+    /* Glassmorphic Panel Primitive */
+    .felis-glass {
+      background: var(--fos-bg-panel-idle);
+      backdrop-filter: var(--fos-blur-glass);
+      -webkit-backdrop-filter: var(--fos-blur-glass);
+      border: 1px solid var(--fos-border-idle);
+    }
+
+    /* Window Base Primitive */
+    .felis-window {
+      position: absolute;
+      background: var(--fos-bg-panel-idle);
+      backdrop-filter: var(--fos-blur-glass);
+      -webkit-backdrop-filter: var(--fos-blur-glass);
+      border: 1px solid var(--fos-border-idle);
+      border-radius: var(--fos-radius-win);
+      box-shadow: var(--fos-shadow-win);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      resize: both;
+      min-width: 340px;
+      min-height: 220px;
+      transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    /* Focused Window Elevation */
+    .felis-window.is-focused {
+      background: var(--fos-bg-panel-active);
+      border-color: var(--fos-border-active);
+      box-shadow: var(--fos-shadow-win), var(--fos-shadow-glow);
+    }
+    
+    .felis-window.is-focused .felisos-chrome-control .control-icon {
+      fill: var(--fos-text-main);
+    }
+
+    .felis-window.is-maximized {
+      border-radius: 0 !important;
+      resize: none !important;
+    }
+
+    /* New FelisOS SVG Chrome Controls */
+    .felisos-chrome-control {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, opacity 0.15s ease;
+    }
+
+    .felisos-chrome-control .control-bg {
+      fill: var(--chrome-control-exit-bg-default);
+      transition: fill 0.15s ease;
+    }
+
+    .felisos-chrome-control .control-icon {
+      fill: var(--chrome-control-exit-icon-default);
+      transition: fill 0.15s ease;
+    }
+
+    /* Exit Control States */
+    .felisos-chrome-control.control-exit:hover .control-bg {
+      fill: var(--chrome-control-exit-bg-hover);
+    }
+    .felisos-chrome-control.control-exit:hover .control-icon {
+      fill: var(--chrome-control-exit-icon-hover);
+    }
+    .felisos-chrome-control.control-exit:active .control-bg {
+      fill: var(--chrome-control-exit-bg-active);
+    }
+
+    /* Expand Control States */
+    .felisos-chrome-control.control-expand:hover .control-bg {
+      fill: var(--chrome-control-expand-bg-hover);
+    }
+    .felisos-chrome-control.control-expand:active .control-bg {
+      fill: var(--chrome-control-expand-bg-active);
+    }
+    
+    /* Hide Control States */
+    .felisos-chrome-control.control-hide:hover .control-bg {
+      fill: var(--chrome-control-hide-bg-hover);
+    }
+    .felisos-chrome-control.control-hide:active .control-bg {
+      fill: var(--chrome-control-hide-bg-active);
+    }
+
+    .felis-window:not(.is-focused) .felisos-chrome-control {
+      opacity: var(--chrome-control-inactive-opacity);
+    }
+
+    /* Custom Form Controls */
+    .fos-input {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--fos-border-idle);
+      color: var(--fos-text-main);
+      padding: 8px 12px;
+      border-radius: var(--fos-radius-ctrl);
+      font-family: var(--fos-font-ui);
+      font-size: 0.875rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .fos-input:focus {
+      border-color: var(--fos-accent-lavender);
+      background: rgba(0, 0, 0, 0.55);
+      box-shadow: 0 0 0 3px rgba(163, 116, 213, 0.2);
+    }
+
+    .fos-btn {
+      background: var(--fos-accent-lavender);
+      color: #FFFFFF;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--fos-radius-ctrl);
+      font-family: var(--fos-font-ui);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .fos-btn:hover {
+      background: var(--fos-accent-lavender-hover);
+      box-shadow: 0 4px 12px var(--fos-accent-lavender-glow);
+    }
+
+    .fos-btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--fos-text-main);
+      border: 1px solid var(--fos-border-idle);
+    }
+
+    .fos-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Custom Switch Toggle */
+    .fos-toggle {
+      width: 40px;
+      height: 22px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      border: 1px solid var(--fos-border-idle);
+    }
+
+    .fos-toggle::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background: var(--fos-text-muted);
+      border-radius: 50%;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fos-toggle.active {
+      background: var(--fos-accent-lavender);
+      border-color: var(--fos-accent-lavender);
+    }
+
+    .fos-toggle.active::after {
+      left: 20px;
+      background: #FFFFFF;
+    }
+
+    /* Dynamic Dock Styling */
+    .fos-dock-item {
+      position: relative;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+    }
+
+    .fos-dock-item:hover {
+      transform: translateY(-8px) scale(1.15);
+    }
+
+    .fos-dock-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--fos-accent-lavender);
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 6px var(--fos-accent-lavender);
+      display: none;
+    }
+
+    /* Chart Container Rule */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 220px;
+    }
+
+    /* Terminal Styling */
+    .terminal-body {
+      font-family: var(--fos-font-mono);
+      background: rgba(10, 10, 14, 0.88);
+      color: #A374D5;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.15);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--fos-accent-lavender);
+    }
+  </style>
+</head>
+
+<body class="fos-wallpaper-default relative flex flex-col justify-between overflow-hidden" id="fos-body">
+
+  <!-- TOP STATUS BAR (Layer Level: z-50) -->
+  <header id="fos-top-bar" class="h-8 w-full felis-glass z-50 flex items-center justify-between px-3 text-xs border-b border-white/10 relative">
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2 cursor-pointer font-bold tracking-wide text-white" onclick="toggleAppDrawer()">
+        <span class="w-5 h-5 rounded bg-purple-600/60 flex items-center justify-center text-white text-xs font-mono shadow">❖</span>
+        <span>FelisOS</span>
+        <span class="text-[10px] text-purple-300/60 font-mono">v2026.9</span>
+      </div>
+
+      <nav class="hidden sm:flex items-center gap-3 text-gray-300 text-[11px]">
+        <button class="hover:text-white transition" onclick="bringToFront('win-files')">File</button>
+        <button class="hover:text-white transition" onclick="bringToFront('win-harness')">Design Specs</button>
+        <button class="hover:text-white transition" onclick="bringToFront('win-monitor')">Telemetry</button>
+        <button class="hover:text-white transition" onclick="bringToFront('win-settings')">System</button>
+        <button class="hover:text-white transition" onclick="openToast('FelisOS Kernel v2.6 stable.')">Help</button>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-3 text-gray-300">
+      <button class="flex items-center gap-1 hover:text-white px-2 py-0.5 rounded hover:bg-white/5 transition" onclick="openToast('Network status: Connected (100 Mbps)')">
+        <span id="network-icon">📶</span>
+        <span class="text-[10px] text-gray-400 font-mono">100Mbps</span>
+      </button>
+
+      <button class="flex items-center gap-1 hover:text-white px-2 py-0.5 rounded hover:bg-white/5 transition" onclick="openToast('Battery status: 98% (Charging)')">
+        <span>🔋</span>
+        <span class="text-[10px] text-gray-400 font-mono">98%</span>
+      </button>
+
+      <div class="h-3 w-[1px] bg-white/15"></div>
+
+      <button class="hover:text-white font-medium px-2 py-0.5 rounded hover:bg-white/5 transition font-mono" id="clock-display">
+        00:00:00 AM
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN DESKTOP ENVIRONMENT SPACE -->
+  <main id="fos-desktop-space" class="relative flex-1 w-full h-[calc(100vh-88px)] overflow-hidden">
+    
+    <div class="p-4 grid grid-flow-col auto-rows-[90px] gap-4 w-max h-full z-10 relative">
+      <div class="w-20 h-20 flex flex-col items-center justify-center gap-1 rounded-lg hover:bg-white/10 cursor-pointer text-center group transition" onclick="openWindow('win-settings')">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-900/80 to-slate-900 flex items-center justify-center text-xl shadow-lg border border-purple-500/30 group-hover:scale-105 transition">⚙</div>
+        <span class="text-[11px] text-gray-200 font-medium drop-shadow group-hover:text-purple-300">Settings</span>
+      </div>
+
+      <div class="w-20 h-20 flex flex-col items-center justify-center gap-1 rounded-lg hover:bg-white/10 cursor-pointer text-center group transition" onclick="openWindow('win-monitor')">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-900/80 to-slate-900 flex items-center justify-center text-xl shadow-lg border border-indigo-500/30 group-hover:scale-105 transition">📊</div>
+        <span class="text-[11px] text-gray-200 font-medium drop-shadow group-hover:text-indigo-300">Telemetry</span>
+      </div>
+
+      <div class="w-20 h-20 flex flex-col items-center justify-center gap-1 rounded-lg hover:bg-white/10 cursor-pointer text-center group transition" onclick="openWindow('win-files')">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-900/80 to-slate-900 flex items-center justify-center text-xl shadow-lg border border-amber-500/30 group-hover:scale-105 transition">📁</div>
+        <span class="text-[11px] text-gray-200 font-medium drop-shadow group-hover:text-amber-300">Files</span>
+      </div>
+
+      <div class="w-20 h-20 flex flex-col items-center justify-center gap-1 rounded-lg hover:bg-white/10 cursor-pointer text-center group transition" onclick="openWindow('win-terminal')">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-900/80 to-slate-900 flex items-center justify-center text-xl shadow-lg border border-emerald-500/30 group-hover:scale-105 transition">💻</div>
+        <span class="text-[11px] text-gray-200 font-medium drop-shadow group-hover:text-emerald-300">Terminal</span>
+      </div>
+
+      <div class="w-20 h-20 flex flex-col items-center justify-center gap-1 rounded-lg hover:bg-white/10 cursor-pointer text-center group transition" onclick="openWindow('win-harness')">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-900/80 to-slate-900 flex items-center justify-center text-xl shadow-lg border border-pink-500/30 group-hover:scale-105 transition">🎨</div>
+        <span class="text-[11px] text-gray-200 font-medium drop-shadow group-hover:text-pink-300">UI Harness</span>
+      </div>
+    </div>
+
+    <!-- WINDOW CONTAINER AREA -->
+    <div id="fos-window-container" class="absolute inset-0 pointer-events-none z-20">
+
+      <!-- WINDOW 1: SYSTEM SETTINGS -->
+      <div class="felis-window pointer-events-auto" id="win-settings" style="width: 460px; height: 380px; top: 40px; left: 120px;" onclick="bringToFront('win-settings')">
+        <div class="h-10 px-0 bg-black/30 border-b border-white/10 flex items-center justify-between cursor-move titlebar-drag" onpointerdown="startWindowDrag(event, 'win-settings')">
+          <div class="flex items-center h-full">
+            <!-- FelisOS Figma Window Controls Specification -->
+            <!-- Hide -->
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-hide" onclick="minimizeWindow('win-settings', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" />
+              <path class="control-icon" d="M6 13V12H18V13H6Z" />
+            </svg>
+            <!-- Expand -->
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-expand" onclick="toggleMaximize('win-settings', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" />
+              <path class="control-icon" d="M6 6H18V18H6V6ZM7.2 7.2V16.8H16.8V7.2H7.2Z" />
+            </svg>
+            <!-- Exit -->
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-exit" onclick="closeWindow('win-settings', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" />
+              <path class="control-icon" d="M7.4 6L12 10.6L16.6 6L18 7.4L13.4 12L18 16.6L16.6 18L12 13.4L7.4 18L6 16.6L10.6 12L6 7.4L7.4 6Z" />
+            </svg>
+          </div>
+          <div class="flex-1 flex justify-center text-xs font-semibold text-gray-300 pointer-events-none pr-[72px]">Settings</div>
+        </div>
+
+        <div class="p-5 flex-1 overflow-y-auto space-y-4">
+          <div>
+            <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Device Name</label>
+            <input type="text" class="fos-input w-full" value="felis-legacy-box" id="device-name-input" />
+          </div>
+
+          <div class="space-y-3 pt-2">
+            <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider">Desktop Appearance</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button class="p-2 bg-slate-900/90 border border-purple-500/40 rounded-lg text-xs font-medium hover:border-purple-400 transition flex flex-col items-center gap-1" onclick="changeWallpaper('default')">
+                <span class="w-full h-6 rounded bg-purple-900/40 border border-purple-500/30 block"></span>
+                <span>Graphite</span>
+              </button>
+              <button class="p-2 bg-slate-900/90 border border-white/10 rounded-lg text-xs font-medium hover:border-purple-400 transition flex flex-col items-center gap-1" onclick="changeWallpaper('aurora')">
+                <span class="w-full h-6 rounded bg-emerald-900/40 border border-emerald-500/30 block"></span>
+                <span>Aurora</span>
+              </button>
+              <button class="p-2 bg-slate-900/90 border border-white/10 rounded-lg text-xs font-medium hover:border-purple-400 transition flex flex-col items-center gap-1" onclick="changeWallpaper('obsidian')">
+                <span class="w-full h-6 rounded bg-gray-900 border border-gray-700 block"></span>
+                <span>Obsidian</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-white/10 space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-xs font-medium text-gray-200 block">Hardware Acceleration</span>
+                <span class="text-[10px] text-gray-400">Optimize Canvas & CSS GPU compositing</span>
+              </div>
+              <div class="fos-toggle active" onclick="toggleSwitch(this)"></div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-xs font-medium text-gray-200 block">Legacy Resource Saver</span>
+                <span class="text-[10px] text-gray-400">Reduce blur effects for older Intel GPUs</span>
+              </div>
+              <div class="fos-toggle" onclick="toggleSwitch(this)"></div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-white/10 flex justify-end gap-2">
+            <button class="fos-btn-secondary px-3 py-1 text-xs rounded-lg" onclick="closeWindow('win-settings', event)">Cancel</button>
+            <button class="fos-btn px-4 py-1 text-xs rounded-lg" onclick="saveSettings()">Save Configuration</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- WINDOW 2: SYSTEM TELEMETRY MONITOR -->
+      <div class="felis-window pointer-events-auto" id="win-monitor" style="width: 580px; height: 420px; top: 80px; left: 200px;" onclick="bringToFront('win-monitor')">
+        <div class="h-10 px-0 bg-black/30 border-b border-white/10 flex items-center justify-between cursor-move titlebar-drag" onpointerdown="startWindowDrag(event, 'win-monitor')">
+          <div class="flex items-center h-full">
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-hide" onclick="minimizeWindow('win-monitor', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M6 13V12H18V13H6Z" />
+            </svg>
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-expand" onclick="toggleMaximize('win-monitor', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M6 6H18V18H6V6ZM7.2 7.2V16.8H16.8V7.2H7.2Z" />
+            </svg>
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-exit" onclick="closeWindow('win-monitor', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M7.4 6L12 10.6L16.6 6L18 7.4L13.4 12L18 16.6L16.6 18L12 13.4L7.4 18L6 16.6L10.6 12L6 7.4L7.4 6Z" />
+            </svg>
+          </div>
+          <div class="flex-1 flex justify-center text-xs font-semibold text-gray-300 pr-[72px]">Telemetry</div>
+        </div>
+
+        <div class="p-4 flex-1 overflow-y-auto space-y-4 flex flex-col">
+          <div class="grid grid-cols-4 gap-3 text-center">
+            <div class="p-2.5 bg-black/30 rounded-lg border border-white/5">
+              <span class="text-[10px] text-gray-400 block uppercase">CPU Load</span>
+              <span class="text-base font-bold text-purple-300 font-mono" id="stat-cpu">24%</span>
+            </div>
+            <div class="p-2.5 bg-black/30 rounded-lg border border-white/5">
+              <span class="text-[10px] text-gray-400 block uppercase">RAM Used</span>
+              <span class="text-base font-bold text-indigo-300 font-mono" id="stat-ram">1.4 / 4.0 GB</span>
+            </div>
+            <div class="p-2.5 bg-black/30 rounded-lg border border-white/5">
+              <span class="text-[10px] text-gray-400 block uppercase">Swap Storage</span>
+              <span class="text-base font-bold text-emerald-300 font-mono">212 MB</span>
+            </div>
+            <div class="p-2.5 bg-black/30 rounded-lg border border-white/5">
+              <span class="text-[10px] text-gray-400 block uppercase">FPS Rate</span>
+              <span class="text-base font-bold text-amber-300 font-mono">60.0</span>
+            </div>
+          </div>
+          <div class="bg-black/40 p-3 rounded-xl border border-white/10 flex-1 flex flex-col min-h-[220px]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-gray-300">Realtime Processor Load (%)</span>
+              <span class="text-[10px] text-emerald-400 font-mono">● LIVE KERNEL FEED</span>
+            </div>
+            <div class="chart-container flex-1">
+              <canvas id="telemetryChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WINDOW 3: FILE EXPLORER (Drive Integration Ready) -->
+      <div class="felis-window pointer-events-auto" id="win-files" style="width: 520px; height: 360px; top: 120px; left: 280px;" onclick="bringToFront('win-files')">
+        <div class="h-10 px-0 bg-black/30 border-b border-white/10 flex items-center justify-between cursor-move titlebar-drag" onpointerdown="startWindowDrag(event, 'win-files')">
+          <div class="flex items-center h-full">
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-hide" onclick="minimizeWindow('win-files', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M6 13V12H18V13H6Z" />
+            </svg>
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-expand" onclick="toggleMaximize('win-files', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M6 6H18V18H6V6ZM7.2 7.2V16.8H16.8V7.2H7.2Z" />
+            </svg>
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-exit" onclick="closeWindow('win-files', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M7.4 6L12 10.6L16.6 6L18 7.4L13.4 12L18 16.6L16.6 18L12 13.4L7.4 18L6 16.6L10.6 12L6 7.4L7.4 6Z" />
+            </svg>
+          </div>
+          <div class="flex-1 flex justify-center text-xs font-semibold text-gray-300 pr-[72px]">File Explorer</div>
+        </div>
+
+        <div class="flex flex-1 overflow-hidden">
+          <div class="w-36 bg-black/20 border-r border-white/10 p-3 space-y-2 text-xs">
+            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">Places</span>
+            <button class="w-full text-left px-2 py-1.5 rounded hover:bg-white/5 text-gray-300 flex items-center gap-2">
+              <span>🏠</span> Home
+            </button>
+            <button class="w-full text-left px-2 py-1.5 rounded bg-purple-600/20 text-purple-300 font-medium flex items-center gap-2">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM12 18l-4-4h3v-4h2v4h3l-4 4z"/></svg> Google Drive
+            </button>
+            <button class="w-full text-left px-2 py-1.5 rounded hover:bg-white/5 text-gray-300 flex items-center gap-2">
+              <span>⚙</span> System Root
+            </button>
+          </div>
+          <div class="flex-1 p-4 overflow-y-auto">
+            <div class="text-xs text-gray-400 mb-3 font-mono">Google Drive - Connected</div>
+            <div class="p-6 flex flex-col items-center justify-center text-center space-y-3 bg-white/5 rounded-lg border border-white/10 h-full">
+              <svg class="w-12 h-12 text-gray-500" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13H5.5L12 6.5z"/>
+              </svg>
+              <div class="text-gray-300 text-sm font-medium">Drive Integration Active</div>
+              <p class="text-xs text-gray-400 max-w-xs">OAuth scopes for Google Drive have been provisioned in the backend. File browsing will be mounted here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WINDOW 4: CLI TERMINAL -->
+      <div class="felis-window pointer-events-auto" id="win-terminal" style="width: 560px; height: 340px; top: 100px; left: 160px;" onclick="bringToFront('win-terminal')">
+        <div class="h-10 px-0 bg-black/40 border-b border-white/10 flex items-center justify-between cursor-move titlebar-drag" onpointerdown="startWindowDrag(event, 'win-terminal')">
+          <div class="flex items-center h-full">
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-hide" onclick="minimizeWindow('win-terminal', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M6 13V12H18V13H6Z" />
+            </svg>
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-expand" onclick="toggleMaximize('win-terminal', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M6 6H18V18H6V6ZM7.2 7.2V16.8H16.8V7.2H7.2Z" />
+            </svg>
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-exit" onclick="closeWindow('win-terminal', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M7.4 6L12 10.6L16.6 6L18 7.4L13.4 12L18 16.6L16.6 18L12 13.4L7.4 18L6 16.6L10.6 12L6 7.4L7.4 6Z" />
+            </svg>
+          </div>
+          <div class="flex-1 flex justify-center text-xs font-semibold text-gray-400 font-mono pr-[72px]">Terminal</div>
+        </div>
+        <div class="terminal-body p-4 flex-1 overflow-y-auto text-xs space-y-2" id="terminal-content" onclick="focusTerminalInput()">
+          <p class="text-gray-400">FelisOS Terminal Shell [Version 2026.9.1]</p>
+          <div id="terminal-history" class="space-y-1"></div>
+          <div class="flex items-center gap-2 pt-1">
+            <span class="text-emerald-400 font-bold">felis@desktop:~$</span>
+            <input type="text" id="terminal-input" class="bg-transparent text-purple-200 outline-none flex-1 font-mono" onkeydown="handleTerminalCommand(event)" />
+          </div>
+        </div>
+      </div>
+
+      <!-- WINDOW 5: DESIGN SYSTEM HARNESS -->
+      <div class="felis-window pointer-events-auto" id="win-harness" style="width: 620px; height: 440px; top: 60px; left: 80px;" onclick="bringToFront('win-harness')">
+        <div class="h-10 px-0 bg-black/30 border-b border-white/10 flex items-center justify-between cursor-move titlebar-drag" onpointerdown="startWindowDrag(event, 'win-harness')">
+          <div class="flex items-center h-full">
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-hide" onclick="minimizeWindow('win-harness', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M6 13V12H18V13H6Z" />
+            </svg>
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-expand" onclick="toggleMaximize('win-harness', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M6 6H18V18H6V6ZM7.2 7.2V16.8H16.8V7.2H7.2Z" />
+            </svg>
+            <svg viewBox="0 0 24 24" class="felisos-chrome-control control-exit" onclick="closeWindow('win-harness', event)" onpointerdown="event.stopPropagation()" xmlns="http://www.w3.org/2000/svg">
+              <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M7.4 6L12 10.6L16.6 6L18 7.4L13.4 12L18 16.6L16.6 18L12 13.4L7.4 18L6 16.6L10.6 12L6 7.4L7.4 6Z" />
+            </svg>
+          </div>
+          <div class="flex-1 flex justify-center text-xs font-semibold text-gray-300 pr-[72px]">Figma Spec Harness</div>
+        </div>
+
+        <div class="p-5 flex-1 overflow-y-auto space-y-6">
+          <div>
+            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">1. Core Design Tokens</h4>
+            <div class="bg-black/30 border border-white/10 rounded-lg overflow-hidden text-xs">
+              <table class="w-full text-left">
+                <thead class="bg-white/5 text-gray-400">
+                  <tr><th class="p-2 border-b border-white/10">Token</th><th class="p-2 border-b border-white/10">CSS Variable</th></tr>
+                </thead>
+                <tbody class="divide-y divide-white/5 text-gray-300 font-mono text-[11px]">
+                  <tr><td class="p-2">Graphite Base</td><td class="text-purple-300">#121218</td></tr>
+                  <tr><td class="p-2">Lavender Accent</td><td class="text-purple-300">#A374D5</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">2. SVG Window Chrome Controls (Live Implementation)</h4>
+            <div class="grid grid-cols-2 gap-4 bg-black/20 p-4 rounded-xl border border-white/10">
+              <div class="space-y-2">
+                <span class="text-xs text-gray-400 block font-medium">Control Preview</span>
+                <div class="flex bg-black/50 p-2 rounded w-fit gap-1">
+                  <svg viewBox="0 0 24 24" class="felisos-chrome-control control-hide" xmlns="http://www.w3.org/2000/svg">
+                    <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M6 13V12H18V13H6Z" />
+                  </svg>
+                  <svg viewBox="0 0 24 24" class="felisos-chrome-control control-expand" xmlns="http://www.w3.org/2000/svg">
+                    <rect class="control-bg" width="24" height="24" /><path class="control-icon" d="M6 6H18V18H6V6ZM7.2 7.2V16.8H16.8V7.2H7.2Z" />
+                  </svg>
+                  <svg viewBox="0 0 24 24" class="felisos-chrome-control control-exit" xmlns="http://www.w3.org/2000/svg">
+                    <rect class="control-bg" width="24" height="24" rx="4" />
+                    <path class="control-icon" d="M7.4 6L12 10.6L16.6 6L18 7.4L13.4 12L18 16.6L16.6 18L12 13.4L7.4 18L6 16.6L10.6 12L6 7.4L7.4 6Z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- BOTTOM DOCK SHELF -->
+  <footer id="fos-dock-container" class="h-14 w-full fixed bottom-2 inset-x-0 z-50 flex justify-center pointer-events-none">
+    <div class="felis-glass px-4 py-2 rounded-2xl border border-white/15 flex items-center gap-3 shadow-2xl pointer-events-auto">
+      <button class="fos-dock-item w-10 h-10 rounded-xl bg-purple-600/80 hover:bg-purple-500 text-white flex items-center justify-center text-lg shadow-lg font-mono" onclick="toggleAppDrawer()" title="App Launcher">❖</button>
+      <div class="h-6 w-[1px] bg-white/15"></div>
+      <button class="fos-dock-item w-10 h-10 rounded-xl bg-slate-900 border border-purple-500/30 flex items-center justify-center text-xl shadow" onclick="toggleWindowFromDock('win-settings')">⚙<div class="fos-dock-dot" id="dot-win-settings"></div></button>
+      <button class="fos-dock-item w-10 h-10 rounded-xl bg-slate-900 border border-indigo-500/30 flex items-center justify-center text-xl shadow" onclick="toggleWindowFromDock('win-monitor')">📊<div class="fos-dock-dot" id="dot-win-monitor"></div></button>
+      <button class="fos-dock-item w-10 h-10 rounded-xl bg-slate-900 border border-amber-500/30 flex items-center justify-center text-xl shadow" onclick="toggleWindowFromDock('win-files')">📁<div class="fos-dock-dot" id="dot-win-files"></div></button>
+      <button class="fos-dock-item w-10 h-10 rounded-xl bg-slate-900 border border-emerald-500/30 flex items-center justify-center text-xl shadow" onclick="toggleWindowFromDock('win-terminal')">💻<div class="fos-dock-dot" id="dot-win-terminal"></div></button>
+      <button class="fos-dock-item w-10 h-10 rounded-xl bg-slate-900 border border-pink-500/30 flex items-center justify-center text-xl shadow" onclick="toggleWindowFromDock('win-harness')">🎨<div class="fos-dock-dot" id="dot-win-harness"></div></button>
+    </div>
+  </footer>
+
+  <!-- App Launcher Popover -->
+  <div id="fos-app-drawer" class="fixed left-4 bottom-16 z-[70] w-72 felis-glass rounded-2xl p-4 shadow-2xl border border-white/15 hidden transition-all duration-200">
+    <div class="grid grid-cols-3 gap-3">
+      <button class="p-2 hover:bg-white/10 rounded-lg flex flex-col items-center gap-1" onclick="openWindow('win-settings'); toggleAppDrawer();"><span class="text-xl">⚙</span><span class="text-[10px] text-gray-300">Settings</span></button>
+      <button class="p-2 hover:bg-white/10 rounded-lg flex flex-col items-center gap-1" onclick="openWindow('win-monitor'); toggleAppDrawer();"><span class="text-xl">📊</span><span class="text-[10px] text-gray-300">Telemetry</span></button>
+      <button class="p-2 hover:bg-white/10 rounded-lg flex flex-col items-center gap-1" onclick="openWindow('win-files'); toggleAppDrawer();"><span class="text-xl">📁</span><span class="text-[10px] text-gray-300">Files</span></button>
+    </div>
+  </div>
+
+  <div id="toast-container" class="fixed top-10 right-4 z-[80] flex flex-col gap-2 pointer-events-none"></div>
+
+  <script>
+    let zIndexCounter = 1;
+    let activeDragWin = null;
+    let dragOffset = { x: 0, y: 0 };
+    let telemetryChart = null;
+
+    function bringToFront(winId) {
+      const win = document.getElementById(winId);
+      if (!win) return;
+      document.querySelectorAll('.felis-window').forEach(w => w.classList.remove('is-focused'));
+      zIndexCounter = Math.min(zIndexCounter + 1, 30);
+      win.style.zIndex = zIndexCounter;
+      win.classList.add('is-focused');
+      win.style.display = 'flex';
+      updateDockDot(winId, true);
+    }
+
+    function openWindow(winId) { bringToFront(winId); }
+
+    function toggleWindowFromDock(winId) {
+      const win = document.getElementById(winId);
+      if (!win) return;
+      if (win.style.display === 'none' || !win.classList.contains('is-focused')) {
+        bringToFront(winId);
+      } else {
+        minimizeWindow(winId);
+      }
+    }
+
+    function closeWindow(winId, e) {
+      if (e) e.stopPropagation();
+      const win = document.getElementById(winId);
+      if (win) {
+        win.style.display = 'none';
+        win.classList.remove('is-focused');
+        updateDockDot(winId, false);
+      }
+    }
+
+    function minimizeWindow(winId, e) {
+      closeWindow(winId, e);
+    }
+
+    function toggleMaximize(winId, e) {
+      if (e) e.stopPropagation();
+      const win = document.getElementById(winId);
+      if (!win) return;
+      if (win.classList.contains('is-maximized')) {
+        win.classList.remove('is-maximized');
+        win.style.top = win.dataset.prevTop || '60px';
+        win.style.left = win.dataset.prevLeft || '80px';
+        win.style.width = win.dataset.prevWidth || '500px';
+        win.style.height = win.dataset.prevHeight || '350px';
+      } else {
+        win.dataset.prevTop = win.style.top;
+        win.dataset.prevLeft = win.style.left;
+        win.dataset.prevWidth = win.style.width;
+        win.dataset.prevHeight = win.style.height;
+        win.classList.add('is-maximized');
+        win.style.top = '0px';
+        win.style.left = '0px';
+        win.style.width = '100%';
+        win.style.height = '100%';
+      }
+    }
+
+    function updateDockDot(winId, active) {
+      const dot = document.getElementById('dot-' + winId);
+      if (dot) dot.style.display = active ? 'block' : 'none';
+    }
+
+    function startWindowDrag(e, winId) {
+      bringToFront(winId);
+      const win = document.getElementById(winId);
+      if (win.classList.contains('is-maximized')) return;
+      activeDragWin = win;
+      const winRect = win.getBoundingClientRect();
+      dragOffset.x = e.clientX - winRect.left;
+      dragOffset.y = e.clientY - winRect.top;
+      e.target.setPointerCapture(e.pointerId);
+      e.target.addEventListener('pointermove', onWindowDrag);
+      e.target.addEventListener('pointerup', stopWindowDrag);
+    }
+
+    function onWindowDrag(e) {
+      if (!activeDragWin) return;
+      const deskRect = document.getElementById('fos-desktop-space').getBoundingClientRect();
+      let newLeft = e.clientX - deskRect.left - dragOffset.x;
+      let newTop = e.clientY - deskRect.top - dragOffset.y;
+      newLeft = Math.max(0, Math.min(newLeft, deskRect.width - activeDragWin.offsetWidth));
+      newTop = Math.max(0, Math.min(newTop, deskRect.height - activeDragWin.offsetHeight));
+      activeDragWin.style.left = `${newLeft}px`;
+      activeDragWin.style.top = `${newTop}px`;
+    }
+
+    function stopWindowDrag(e) {
+      if (activeDragWin) {
+        e.target.removeEventListener('pointermove', onWindowDrag);
+        e.target.removeEventListener('pointerup', stopWindowDrag);
+        activeDragWin = null;
+      }
+    }
+
+    function toggleAppDrawer() {
+      document.getElementById('fos-app-drawer').classList.toggle('hidden');
+    }
+
+    function openToast(msg) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'felis-glass px-3 py-2 rounded-xl text-xs text-purple-200 border border-purple-500/30 shadow-xl transition-all duration-300';
+      toast.innerText = msg;
+      container.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if(document.getElementById('telemetryChart')) {
+        const ctx = document.getElementById('telemetryChart').getContext('2d');
+        telemetryChart = new Chart(ctx, {
+          type: 'line',
+          data: { labels: ['1','2','3','4','5','6'], datasets: [{ data: [18,25,32,22,29,24], borderColor: '#A374D5', backgroundColor: 'rgba(163, 116, 213, 0.15)', fill: true, tension: 0.4, borderWidth: 2 }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+      }
+      
+      bringToFront('win-monitor');
+      bringToFront('win-harness');
+      ['win-settings','win-monitor','win-files','win-terminal','win-harness'].forEach(id => updateDockDot(id, true));
+    });
+  </script>
+</body>
+</html>

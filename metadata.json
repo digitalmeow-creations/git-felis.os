@@ -1,0 +1,6 @@
+{
+  "name": "FelisOS",
+  "description": "An in-browser operating system interface featuring a desktop environment, window management, and virtual filesystem.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
